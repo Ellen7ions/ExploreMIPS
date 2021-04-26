@@ -114,11 +114,20 @@ module IF(
         .W_next_pc(W_next_pc)
     );
 
-    Instr_ROM instr_rom(
-        .clka(clk),     // input wire clka
+    // Instr_ROM instr_rom(
+    //     .clka(clk),     // input wire clka
+    //     .ena(1'b1),      // input wire ena
+    //     .addra(W_next_pc),  // input wire [31 : 0] addra
+    //     .douta(W_instr)   // output wire [31 : 0] douta
+    // );
+
+    Instr_RAM instr_ram (
+        .clka(clk),    // input wire clka
         .ena(1'b1),      // input wire ena
-        .addra(W_next_pc),  // input wire [31 : 0] addra
-        .douta(W_instr)   // output wire [31 : 0] douta
+        .wea(1'b0),      // input wire [0 : 0] wea
+        .addra(W_next_pc[11:2]),  // input wire [9 : 0] addra
+        .dina(32'h0000_0000),    // input wire [31 : 0] dina
+        .douta(W_instr)  // output wire [31 : 0] douta
     );
 
     assign W_IF_PC = W_next_pc;
