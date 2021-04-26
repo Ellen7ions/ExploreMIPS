@@ -6,7 +6,7 @@ ExploreMIPS is a simple 5-stage pipelined **MIPS** CPU  implemented by Verilog. 
 
 The below instructions are implemented.
 
-![](doc\instructions.png)
+![](doc/instructions.png)
 
 ### References
 
