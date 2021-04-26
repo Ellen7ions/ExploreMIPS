@@ -2,7 +2,7 @@
 
 ### Introduction
 
-ExploreMIPS is a simple 5-stage pipelined **MIPS** CPU  implemented in Verilog. The architecture of CPU solved simple hazard problems.
+ExploreMIPS is a simple 5-stage pipelined **MIPS** CPU implemented in Verilog. The architecture of CPU solved simple hazard problems.
 
 The below instructions are implemented.
 
