@@ -1,3 +1,8 @@
 vivado/*
 
 ip_core/*
+!ip_core/Instr_RAM_1
+!ip_core/Instr_ROM
+!ip_core/Memory
+!ip_core/RAM
+!ip_core/ROM
