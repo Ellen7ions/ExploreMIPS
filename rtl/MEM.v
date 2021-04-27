@@ -47,7 +47,7 @@ module MEM(
         .clka(~clk),                 // input wire clka
         .ena(1'b1),                 // input wire ena
         .wea(W_EX_w_mem_ena),       // input wire [3 : 0] wea
-        .addra(W_EX_alu_res),       // input wire [31 : 0] addra
+        .addra({2'b00, W_EX_alu_res[31:2]}),       // input wire [31 : 0] addra
         .dina(W_EX_rt_data),        // input wire [31 : 0] dina
         .douta(W_mem_data)          // output wire [31 : 0] douta
     );
