@@ -38,6 +38,9 @@ module Regs_ID_EX(
     input wire                      W_ID_wb_sel_i,
     input wire                      W_ID_mem_r_i,
 
+    // debug
+    input wire [31:0]               W_ID_PC_i,
+
     output wire [15:0]              W_ID_imme_o,
     output wire [4:0]               W_ID_rs_o,
     output wire [4:0]               W_ID_rt_o,
@@ -50,7 +53,19 @@ module Regs_ID_EX(
     output wire                     W_ID_w_mem_ena_o,
     output wire                     W_ID_w_reg_ena_o,
     output wire                     W_ID_wb_sel_o,
-    output wire                     W_ID_mem_r_o
+    output wire                     W_ID_mem_r_o,
+
+    // debug
+    output wire [31:0]              W_ID_PC_o
+    );
+
+    FlopEnRC #(32) flop_pc(
+        .clk(clk),
+        .en(~en),
+        .rst(rst),
+        .clear(clear),
+        .in(W_ID_PC_i),
+        .out(W_ID_PC_o)
     );
 
     FlopEnRC #(16) flop_imme(

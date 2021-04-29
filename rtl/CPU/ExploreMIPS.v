@@ -22,22 +22,28 @@
 `include "defines.v"
 
 module ExploreMIPS(
-    input   wire          clk,
-    input   wire          rst,
+    input   wire            clk,
+    input   wire            rst,
     
     // instr_ram
-    output  wire          W_instr_ram_ena,
-    output  wire [3:0]    W_instr_ram_wea,
-    output  wire [31:0]   W_instr_ram_w_data,
-    output  wire [31:0]   W_instr_ram_addr,         // *
-    input   wire [31:0]   W_instr_ram_r_data,       // *
+    output  wire            W_instr_ram_ena,
+    output  wire [3:0]      W_instr_ram_wea,
+    output  wire [31:0]     W_instr_ram_w_data,
+    output  wire [31:0]     W_instr_ram_addr,         // *
+    input   wire [31:0]     W_instr_ram_r_data,       // *
     
     // data_ram
-    output  wire          W_data_ram_ena,
-    output  wire [3:0]    W_data_ram_wea,           // *
-    output  wire [31:0]   W_data_ram_w_data,        // *
-    output  wire [31:0]   W_data_ram_addr,          // *
-    input   wire [31:0]   W_data_ram_r_data         // *
+    output  wire            W_data_ram_ena,
+    output  wire [3:0]      W_data_ram_wea,           // *
+    output  wire [31:0]     W_data_ram_w_data,        // *
+    output  wire [31:0]     W_data_ram_addr,          // *
+    input   wire [31:0]     W_data_ram_r_data,        // *
+
+    // debug
+    output  wire [31:0]     W_debug_wb_pc,
+    output  wire [ 3:0]     W_debug_wb_rf_wen,
+    output  wire [ 4:0]     W_debug_wb_rf_wnum,
+    output  wire [31:0]     W_debug_wb_rf_wdata
     );
 
     assign W_instr_ram_ena = 1'b1;
@@ -147,7 +153,13 @@ module ExploreMIPS(
         W_data_ram_wea,
         W_data_ram_w_data,
         W_data_ram_addr,
-        W_data_ram_r_data
+        W_data_ram_r_data,
+
+        // debug
+        W_debug_wb_pc,
+        W_debug_wb_rf_wen,
+        W_debug_wb_rf_wnum,
+        W_debug_wb_rf_wdata
     );
 
     Hazard hazard(

@@ -22,7 +22,13 @@
 
 module Top(
     input wire clk,
-    input wire rst
+    input wire rst,
+
+    // debug
+    output  wire [31:0]     W_debug_wb_pc,
+    output  wire [ 3:0]     W_debug_wb_rf_wen,
+    output  wire [ 4:0]     W_debug_wb_rf_wnum,
+    output  wire [31:0]     W_debug_wb_rf_wdata
     );
     
     wire        W_instr_ram_ena;
@@ -53,7 +59,13 @@ module Top(
         W_data_ram_wea,
         W_data_ram_w_data,
         W_data_ram_addr,
-        W_data_ram_r_data
+        W_data_ram_r_data,
+
+        // debug
+        W_debug_wb_pc,
+        W_debug_wb_rf_wen,
+        W_debug_wb_rf_wnum,
+        W_debug_wb_rf_wdata
     );
 
     Data_RAM data_ram(

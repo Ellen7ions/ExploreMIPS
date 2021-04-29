@@ -82,7 +82,13 @@ module DataPath(
     output  wire [3:0]      W_data_ram_wea,
     output  wire [31:0]     W_data_ram_w_data,
     output  wire [31:0]     W_data_ram_addr,
-    input   wire [31:0]     W_data_ram_r_data
+    input   wire [31:0]     W_data_ram_r_data,
+
+    // debug
+    output  wire [31:0]     W_debug_wb_pc,
+    output  wire [ 3:0]     W_debug_wb_rf_wen,
+    output  wire [ 4:0]     W_debug_wb_rf_wnum,
+    output  wire [31:0]     W_debug_wb_rf_wdata
     );
 
     // wire    IF_ID_flush;
@@ -209,6 +215,8 @@ module DataPath(
     // wire W_ID_EX_w_reg_ena;
     wire W_ID_EX_wb_sel;
 
+    wire [31:0] W_ID_EX_PC;
+
     Regs_ID_EX id_ex(
         clk,
         ID_EX_stall,
@@ -225,6 +233,9 @@ module DataPath(
         W_ID_w_reg_ena,
         W_ID_wb_sel,
         W_ID_mem_r,
+        // debug
+        W_IF_ID_PC,
+
         // out
         W_ID_EX_imme,
         W_ID_EX_rs, W_ID_EX_rt, W_ID_EX_rd,
@@ -235,7 +246,10 @@ module DataPath(
         W_ID_EX_w_mem_ena,
         W_ID_EX_w_reg_ena,
         W_ID_EX_wb_sel,
-        W_ID_EX_mem_r
+        W_ID_EX_mem_r,
+
+        // debug
+        W_ID_EX_PC
     );
 
     // ================================================= //
@@ -278,6 +292,8 @@ module DataPath(
     // wire                     W_EX_MEM_w_reg_ena;
     wire                    W_EX_MEM_wb_sel;
 
+    wire [31:0] W_EX_MEM_PC;
+
     Regs_EX_MEM ex_mem(
         clk,
         EX_MEM_stall,
@@ -294,6 +310,9 @@ module DataPath(
         W_ID_EX_mem_r,
         W_ID_EX_rs,
         W_ID_EX_rt,
+        
+        // debug
+        W_ID_EX_PC,
 
         // out
         W_EX_MEM_alu_res,
@@ -305,7 +324,10 @@ module DataPath(
 
         W_EX_MEM_mem_r,
         W_EX_MEM_rs,
-        W_EX_MEM_rt
+        W_EX_MEM_rt,
+
+        // debug
+        W_EX_MEM_PC
     );
 
     wire [`INSTR_WIDTH-1:0] W_MEM_mem_data;
@@ -344,6 +366,8 @@ module DataPath(
     // wire                    W_MEM_WB_w_reg_ena;
     wire                    W_MEM_WB_wb_sel;
 
+    wire [31:0] W_WB_PC;
+
     Regs_MEM_WB mem_wb(
         clk,
         MEM_WB_stall,
@@ -355,12 +379,16 @@ module DataPath(
         W_MEM_rd,
         W_MEM_w_reg_ena,
         W_MEM_wb_sel,
+
+        W_EX_MEM_PC,
         // out
         W_MEM_WB_mem_data,
         W_MEM_WB_alu_res,
         W_MEM_WB_rd,
         W_MEM_WB_w_reg_ena,
-        W_MEM_WB_wb_sel
+        W_MEM_WB_wb_sel,
+
+        W_WB_PC
     );
 
     // wire [4:0] W_WB_addr;
@@ -379,5 +407,9 @@ module DataPath(
         W_WB_w_data
     );
 
+    assign W_debug_wb_pc        = W_WB_PC;
+    assign W_debug_wb_rf_wen    = {4{W_WB_w_reg_ena}};
+    assign W_debug_wb_rf_wnum   = W_WB_w_addr;
+    assign W_debug_wb_rf_wdata  = W_WB_w_data;
 
 endmodule

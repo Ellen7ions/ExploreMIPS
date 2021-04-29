@@ -35,6 +35,9 @@ module Regs_EX_MEM(
     input wire [4:0]                W_EX_rs_i,
     input wire [4:0]                W_EX_rt_i,
 
+    // debug
+    input wire [31:0]               W_EX_PC_i,
+
     output wire [`INSTR_WIDTH-1:0]  W_EX_alu_res_o,
     output wire [`INSTR_WIDTH-1:0]  W_EX_rt_data_o,
     output wire [4:0]               W_EX_rd_o,
@@ -44,7 +47,19 @@ module Regs_EX_MEM(
     
     output wire                     W_EX_mem_r_o,
     output wire [4:0]               W_EX_rs_o,
-    output wire [4:0]               W_EX_rt_o
+    output wire [4:0]               W_EX_rt_o,
+
+    // debug
+    input wire [31:0]               W_EX_PC_o
+    );
+
+    FlopEnRC #(32) flop_pc(
+        .clk(clk),
+        .en(~en),
+        .rst(rst),
+        .clear(clear),
+        .in(W_EX_PC_i),
+        .out(W_EX_PC_o)
     );
 
     FlopEnRC #(1) flop_mem_r(

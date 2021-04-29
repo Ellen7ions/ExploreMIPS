@@ -30,11 +30,26 @@ module Regs_MEM_WB(
     input  wire                     W_MEM_w_reg_ena_i,
     input  wire                     W_MEM_wb_sel_i,
 
+    // debug
+    input  wire [31:0]              W_MEM_PC_i,
+
     output  wire [`INSTR_WIDTH-1:0] W_MEM_mem_data_o,
     output  wire [`INSTR_WIDTH-1:0] W_MEM_alu_res_o,
     output  wire [4:0]              W_MEM_rd_o,
     output  wire                    W_MEM_w_reg_ena_o,
-    output  wire                    W_MEM_wb_sel_o
+    output  wire                    W_MEM_wb_sel_o,
+
+    // debug
+    input  wire [31:0]              W_MEM_PC_o
+    );
+
+    FlopEnRC #(`INSTR_WIDTH) flop_pc(
+        .clk(clk),
+        .en(~en),
+        .rst(rst),
+        .clear(clear),
+        .in(W_MEM_PC_i),
+        .out(W_MEM_PC_o)
     );
 
     FlopEnRC #(`INSTR_WIDTH) flop_mem_data(
