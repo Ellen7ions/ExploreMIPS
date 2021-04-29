@@ -24,7 +24,7 @@ module tb_exploremips();
     reg clk;
     reg rst;
 
-    ExploreMIPS mips(
+    Top mips(
         clk,
         rst
     );
