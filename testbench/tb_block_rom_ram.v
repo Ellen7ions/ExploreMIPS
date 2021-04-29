@@ -25,7 +25,9 @@ module tb_block_rom_ram();
 
     reg [31:0] addr;
     reg clk;
-    wire [31:0] data;
+    reg [3:0] w_ena;
+    reg  [31:0] dina;
+    wire [31:0] r_data;
 
     initial begin
         clk = 1'b0;
@@ -34,37 +36,45 @@ module tb_block_rom_ram();
         end
     end
 
-    RAM ram (
-        .clka(~clk),                 // input wire clka
-        .ena(1'b1),                 // input wire ena
-        .wea(1'b0),       // input wire [3 : 0] wea
-        .addra(addr),       // input wire [31 : 0] addra
-        .dina(32'h0000_0000),        // input wire [31 : 0] dina
-        .douta(data)          // output wire [31 : 0] douta
-    );
+        RAM your_instance_name (
+            .clka(clk),    // input wire clka
+            .ena(1'b1),      // input wire ena
+            .wea(w_ena),      // input wire [3 : 0] wea
+            .addra(addr),  // input wire [31 : 0] addra
+            .dina(dina),    // input wire [31 : 0] dina
+            .douta(r_data)  // output wire [31 : 0] douta
+        );
 
 
     initial begin
-        #70 begin
+        #10 begin
+            w_ena = 4'b0001;
+            addr = 32'h0000_0000;
+            dina = 32'h1122_3344;
+        end
+
+        #100 begin
+            w_ena = 4'b0010;
+            addr = 32'h0000_0001;
+            dina = 32'h1122_3344;
+        end
+
+        #100 begin
+            w_ena = 4'b0100;
+            addr = 32'h0000_0002;
+            dina = 32'h1122_3344;
+        end
+
+        #170 begin
+            addr = 32'h0000_0000;
+        end
+
+        #170 begin
             addr = 32'h0000_0001;
         end
 
-        #20 begin
+        #170 begin
             addr = 32'h0000_0002;
-        end
-
-        #130 begin
-            addr = 32'h0000_0003;
-        end
-
-        
-        #130 begin
-            addr = 32'h0000_0004;
-        end
-
-        
-        #130 begin
-            addr = 32'h0000_0005;
         end
     end
 
