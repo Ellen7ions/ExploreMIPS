@@ -24,9 +24,20 @@ module tb_exploremips();
     reg clk;
     reg rst;
 
-    ExploreMIPS mips(
+    wire [31:0]     W_debug_wb_pc;
+    wire [ 3:0]     W_debug_wb_rf_wen;
+    wire [ 4:0]     W_debug_wb_rf_wnum;
+    wire [31:0]     W_debug_wb_rf_wdata;
+
+    Top mips(
         clk,
-        rst
+        rst,
+
+        // debug
+        W_debug_wb_pc,
+        W_debug_wb_rf_wen,
+        W_debug_wb_rf_wnum,
+        W_debug_wb_rf_wdata
     );
 
     initial begin
