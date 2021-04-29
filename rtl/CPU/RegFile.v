@@ -35,7 +35,7 @@ module RegFile(
     reg [31:0] regfile[31:0];
 
     initial begin
-        $readmemh("C:/Users/Ellen7ions/Desktop/ExploreMIPS/rtl/CPU/regfile_ram.dat", regfile);
+        $readmemh("F:/University/LoogSonSrc/MyCPUs/ExploreMIPS/rtl/CPU/regfile_ram.dat", regfile);
     end
 
     // read rs

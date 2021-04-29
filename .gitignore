@@ -1,13 +1,6 @@
 vivado/*
 
-ip_core/*
-!ip_core/Instr_RAM_1/*.xci
-!ip_core/Instr_RAM_1/*.coe
-!ip_core/Instr_ROM/*.xci
-!ip_core/Instr_ROM/*.coe
-!ip_core/Memory/*.xci
-!ip_core/Memory/*.coe
-!ip_core/RAM/*.xci
-!ip_core/RAM/*.coe
-!ip_core/ROM/*.xci
-!ip_core/ROM/*.coe
+rtl/Xilinx_IP/*
+
+!rtl/Xilinx_IP/Data_RAM/*.xci
+!rtl/Xilinx_IP/Instr_RAM/*.xci
