@@ -46,7 +46,7 @@ module ExploreMIPS(
     output  wire [31:0]     W_debug_wb_rf_wdata
     );
 
-    assign W_instr_ram_ena = 1'b1;
+    assign W_instr_ram_ena = ~rst;
     assign W_instr_ram_wea = 4'h0;
     assign W_instr_ram_w_data = 32'h0000_0000;
 
