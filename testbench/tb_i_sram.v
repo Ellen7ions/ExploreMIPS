@@ -26,71 +26,105 @@ module tb_i_sram();
     initial begin
         clk = 1'b1;
         repeat (300) begin
-            #50 clk = ~clk;
+            #200 clk = ~clk;
         end
     end
 
     reg         W_instr_ram_ena;
     reg  [3:0]  W_instr_ram_wea;
-    reg  [17:0] W_instr_ram_addr;
+    reg  [31:0] W_instr_ram_addr;
     reg  [31:0] W_instr_ram_w_data;
     wire [31:0] W_instr_ram_r_data;
 
-    reg rsta_busy;
-    reg rstb_busy;
+    wire rsta_busy;
+    wire rstb_busy;
 
-    reg s_axi_awid;
-    reg s_axi_awaddr;
-    reg s_axi_awlen;
-    reg s_axi_awsize;
-    reg s_axi_awburst;
-    reg s_axi_awvalid;
-    reg s_axi_awready;
+    wire [3:0]   s_axi_awid;
+    wire [31:0]  s_axi_awaddr;
+    wire [7:0]   s_axi_awlen;
+    wire [2:0]   s_axi_awsize;
+    wire [1:0]   s_axi_awburst;
+    wire         s_axi_awvalid;
+    wire         s_axi_awready;
+    wire [31:0]  s_axi_wdata;
+    wire [3:0]   s_axi_wstrb;
+    wire         s_axi_wlast;
+    wire         s_axi_wvalid;
+    wire         s_axi_wready;
+    wire [3:0]   s_axi_bid;
+    wire [1:0]   s_axi_bresp;
+    wire         s_axi_bvalid;
+    wire         s_axi_bready;
+    wire [3:0]   s_axi_arid;
+    wire [31:0]  s_axi_araddr;
+    wire [7:0]   s_axi_arlen;
+    wire [2:0]   s_axi_arsize;
+    wire [1:0]   s_axi_arburst;
+    wire         s_axi_arvalid;
+    wire         s_axi_arready;
+    wire [3:0]   s_axi_rid;
+    wire [31:0]  s_axi_rdata;
+    wire [1:0]   s_axi_rresp;
+    wire         s_axi_rlast;
+    wire         s_axi_rvalid;
+    wire         s_axi_rready;
 
-    reg s_axi_wdata;
-    reg s_axi_wstrb;
-    reg s_axi_wlast;
-    reg s_axi_wvalid;
-    reg s_axi_wready;
+    wire W_stall;
 
-    reg s_axi_bid;
-    reg s_axi_bresp;
-    reg s_axi_bvalid;
-    reg s_axi_bready;
+    wire            W_req_o;
+    wire            W_wr_o;
+    wire [1:0]      W_size_o;
+    wire [31:0]     W_addr_o;
+    wire [3:0]      W_wstrb_o;
+    wire [31:0]     W_wdata_o;
+    wire            W_addr_ok_o;
+    wire            W_data_ok_o;
+    wire [31:0]     W_rdata_o;
 
-    reg s_axi_arid;
-    reg s_axi_araddr;
-    reg s_axi_arlen;
-    reg s_axi_arsize;
-    reg s_axi_arburst;
-    reg s_axi_arvalid;
-    reg s_axi_arready;
+    // wire            W_addr_ok_o;
+    // wire            W_data_ok_o;
 
-    reg s_axi_rid;
-    reg s_axi_rdata;
-    reg s_axi_rresp;
-    reg s_axi_rlast;
-    reg s_axi_rvalid;
-    reg s_axi_rready;
+    wire W_data_data_ok;
+    wire W_data_addr_ok;
+
+    i_sram_interface isi(
+        clk, rst,
+        W_instr_ram_ena,
+        W_instr_ram_wea,
+        W_instr_ram_w_data,
+        W_instr_ram_addr,
+        W_instr_ram_r_data,
+        W_stall,
+
+        W_req_o,
+        W_wr_o,
+        W_size_o,
+        W_addr_o,
+        W_wstrb_o,
+        W_wdata_o,
+        W_addr_ok_o,
+        W_data_ok_o,
+        W_rdata_o
+    );
 
     cpu_axi_interface ls_axi(
         .clk(clk),
         .resetn(~rst),
 
-        .inst_req()     ,
-        .inst_wr()      ,
-        .inst_size()    ,
-        .inst_addr()    ,
-        .inst_wdata()   ,
-        .inst_rdata()   ,
-        .inst_addr_ok() ,
-        .inst_data_ok() ,
+        .inst_req(W_req_o)     ,
+        .inst_wr(W_wr_o)      ,
+        .inst_size(W_size_o)    ,
+        .inst_addr(W_addr_o)    ,
+        .inst_wdata(W_data_o)   ,
+        .inst_rdata(W_rdata_o)   ,
+        .inst_addr_ok(W_addr_ok_o) ,
+        .inst_data_ok(W_data_ok_o) ,
 
-        .data_req()     ,
-        .data_wr()      ,
-        .data_size()    ,
-        .data_addr()    ,
-        .data_wdata()   ,
+        .data_req(1'b0)     ,
+        .data_wr(0)      ,
+        .data_size(2'h0)    ,
+        .data_addr(32'h0000_0000)    ,
+        .data_wdata(32'h0000_0000)   ,
         .data_rdata()   ,
         .data_addr_ok() ,
         .data_data_ok() ,
@@ -116,26 +150,26 @@ module tb_i_sram();
         .awid(s_axi_awid)         ,
         .awaddr(s_axi_awaddr)       ,
         .awlen(s_axi_awlen)        ,
-        .awsize()       ,
-        .awburst()      ,
+        .awsize(s_axi_awsize)       ,
+        .awburst(awburst)      ,
         
         .awlock()       ,
         .awcache()      ,
         .awprot()       ,
-        .awvalid()      ,
-        .awready()      ,
+        .awvalid(awvalid)      ,
+        .awready(awready)      ,
 
         .wid()          ,
-        .wdata()        ,
-        .wstrb()        ,
-        .wlast()        ,
-        .wvalid()       ,
-        .wready()       ,
+        .wdata(s_axi_wdata)        ,
+        .wstrb(s_axi_wstrb)        ,
+        .wlast(s_axi_wlast)        ,
+        .wvalid(s_axi_wvalid)       ,
+        .wready(s_axi_wready)       ,
 
-        .bid()          ,
-        .bresp()        ,
-        .bvalid()       ,
-        .bready()       
+        .bid(s_axi_bid)          ,
+        .bresp(s_axi_bresp)        ,
+        .bvalid(s_axi_bvalid)       ,
+        .bready(s_axi_bready)       
         
     );
 
@@ -175,12 +209,24 @@ module tb_i_sram();
         .s_axi_rready       (s_axi_rready)    // input wire s_axi_rready
     );
 
-    always @(posedge clk) begin
-        W_instr_ram_addr = W_instr_ram_addr + 32'h1;
-    end
+    // always @(posedge clk) begin
+    //     if (rst) begin
+    //         W_instr_ram_addr = 32'h0000_0000;
+    //     end else begin
+    //         if (!W_stall) begin
+    //             W_instr_ram_addr <= W_instr_ram_addr + 32'h0000_0001;
+    //         end
+    //     end
+    // end
 
     initial begin
         W_instr_ram_ena =   1'b1;
         W_instr_ram_wea =   4'b0000;
+        rst = 1'b1;
+        W_instr_ram_addr = 32'h0000_0001;
+        #400 rst = 1'b0;
+        // #400 W_instr_ram_addr = 32'h0000_0002;
+        // #400 W_instr_ram_addr = 32'h0000_0003;
+        // #400 W_instr_ram_addr = 32'h0000_0004;
     end
 endmodule
