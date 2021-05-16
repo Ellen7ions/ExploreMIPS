@@ -19,7 +19,7 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-`include "defines.v"
+`include "../defines.v"
 
 module WB(
     input   wire [`INSTR_WIDTH-1:0] W_MEM_alu_res,

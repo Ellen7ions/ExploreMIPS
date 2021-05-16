@@ -19,7 +19,7 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-`include "defines.v"
+`include "../defines.v"
 
 module RegFile(
     input   wire        clk,
@@ -35,7 +35,7 @@ module RegFile(
     reg [31:0] regfile[31:0];
 
     initial begin
-        $readmemh("F:/University/LoogSonSrc/MyCPUs/ExploreMIPS/rtl/CPU/regfile_ram.dat", regfile);
+        $readmemh("F:/University/LoogSonSrc/MyCPUs/ExploreMIPS/rtl/CPU/ID/regfile_ram.dat", regfile);
     end
 
     // read rs

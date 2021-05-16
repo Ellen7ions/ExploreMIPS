@@ -19,7 +19,7 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-`include "defines.v"
+`include "../defines.v"
 
 module NextPC(
     input   wire [`INSTR_WIDTH-1:0] W_pc,

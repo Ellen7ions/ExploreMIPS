@@ -19,7 +19,7 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-`include "defines.v"
+`include "../defines.v"
 
 module EX(
     input wire  [`INSTR_WIDTH-1:0]  W_ID_rs_data,
